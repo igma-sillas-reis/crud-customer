@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
+import { UniqueCpfException } from "../exceptions/customersExceptions.js";
 
 class CustomerRepository {
   constructor() {
@@ -12,6 +13,12 @@ class CustomerRepository {
         data: { name, cpf, birth: new Date(birth) },
       });
     } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        throw new UniqueCpfException();
+      }
       throw error;
     } finally {
       await this.prisma.$disconnect();

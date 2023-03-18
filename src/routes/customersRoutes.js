@@ -10,7 +10,6 @@ router
     CustomerValidators.listCustomersValidator,
     CustomerController.listCustomers
   )
-  .get("/:id", CustomerController.listCustomers)
   .post(
     "/",
     CustomerValidators.createCustomerValidator,
